@@ -1,0 +1,36 @@
+---
+description: Quick reference for choosing the right Maindex tool
+alwaysApply: false
+---
+
+Maindex Smart provides four streamlined tools for memory management. The Smart pipeline handles retrieval strategy, optional LLM-assisted rewriting, and synthesis automatically.
+
+## Decision Tree
+
+| Goal | Tool |
+|---|---|
+| Save a new memory | `keep` |
+| Search, browse, or retrieve memories | `recall` |
+| Update an existing memory by ID | `update` |
+| Delete a memory (soft-delete or permanent wipe) | `forget` |
+
+## Tool Details
+
+### keep
+Store a new memory. Provide `content` (required, 1-100k chars). Optionally include `headline` (Smart generates one if omitted), `tags` (up to 50), `collections` (up to 20), and `metadata`. The `rewrite` flag defaults to false — content is stored exactly as provided unless you explicitly opt in with `rewrite: true` for LLM-assisted clarity improvement. Not idempotent — calling twice creates two memories.
+
+### recall
+Search and retrieve memories. Modes:
+- `relevant` (default) — semantic search by meaning
+- `exact` — literal text match
+- `current_state` — latest revision only
+- `history` — full revision trail
+- `recent` — newest first, no query needed
+
+`query` is required unless mode is `recent`. Optional `limit` (1-100, default 20) and `filters` for `tags` and `collections`. Read-only and idempotent.
+
+### update
+Update an existing memory by `target_id` (mem-* short ID). Provide `changes` with at least one of: `content`, `headline`, `tags`, `metadata`. Tags are additive. Each update creates a new revision (full history preserved). The `rewrite` flag defaults to false — content is stored exactly as provided unless explicitly opted in.
+
+### forget
+Soft-delete a memory by `target_id` (mem-* short ID). Default behavior is a safe, reversible soft-delete. With `wipe_history: true`, permanently purges all revisions (IRREVERSIBLE) — requires `confirm_irreversible_wipe: true` or returns a confirmation prompt instead. Idempotent for soft-delete.
