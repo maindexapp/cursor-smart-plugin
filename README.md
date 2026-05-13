@@ -27,7 +27,7 @@ On first use, you'll be redirected to [maindex.io](https://maindex.io) to sign i
 
 If you need direct access to the full Maindex API — typed associations, collections, bulk operations, graph traversal, and MCP resources — use the **Expert** plugin:
 
-- [cursor-expert-plugin](https://github.com/maindexapp/cursor-expert-plugin) — 14 tools + 6 resources
+- [cursor-expert-plugin](https://github.com/maindexapp/cursor-expert-plugin) — 14 tools + 5 resources
 
 ## Learn More
 
