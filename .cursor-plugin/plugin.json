@@ -1,6 +1,6 @@
 {
   "name": "maindex",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Persistent, relational memory for AI agents and their humans. Connect Cursor to Maindex — a streamlined knowledge graph with four intuitive tools for storing, searching, updating, and managing memories.",
   "author": { "name": "Maindex" },
   "homepage": "https://maindex.io",

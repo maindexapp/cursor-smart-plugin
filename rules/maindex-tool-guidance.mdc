@@ -10,14 +10,24 @@ Maindex Smart provides four streamlined tools for memory management. The Smart p
 | Goal | Tool |
 |---|---|
 | Save a new memory | `keep` |
+| Save into a team collection | `keep` with `team` + `collection` |
 | Search, browse, or retrieve memories | `recall` |
+| Search within a team workspace | `recall` with `team` |
 | Update an existing memory by ID | `update` |
+| Move a team memory to another team collection | `update` with `changes.collection` |
 | Delete a memory (soft-delete or permanent wipe) | `forget` |
+
+## Teams Workspaces
+
+- **`keep`** — Provide `team` (slug) and `collection` (team collection slug) together when writing into a team collection. Personal writes omit both.
+- **`recall`** — Optional `team` limits results to a team workspace. `target_id` may be team-namespaced: `team-slug:mem-xxxx`.
+- **`update`** — `target_id` accepts team-namespaced IDs. `changes.collection` moves a memory to another collection within the same team.
+- **`forget`** — `target_id` accepts team-namespaced IDs.
 
 ## Tool Details
 
 ### keep
-Store a new memory. Provide `content` (required, 1-100k chars). Optionally include `headline` (Smart generates one if omitted), `tags` (up to 50), `collections` (up to 20), and `metadata`. The `rewrite` flag defaults to false — content is stored exactly as provided unless you explicitly opt in with `rewrite: true` for LLM-assisted clarity improvement. Not idempotent — calling twice creates two memories.
+Store a new memory. Provide `content` (required, 1-100k chars). Optionally include `headline` (Smart generates one if omitted), `tags` (up to 50), `collections` (up to 20, personal scope), `metadata`, and for team writes `team` + `collection` (both required together). The `rewrite` flag defaults to false — content is stored exactly as provided unless you explicitly opt in with `rewrite: true` for LLM-assisted clarity improvement. Not idempotent — calling twice creates two memories.
 
 ### recall
 Search and retrieve memories. Modes:
@@ -27,10 +37,10 @@ Search and retrieve memories. Modes:
 - `history` — full revision trail
 - `recent` — newest first, no query needed
 
-`query` is required unless mode is `recent`. Optional `limit` (1-100, default 20) and `filters` for `tags` and `collections`. Read-only and idempotent.
+`query` is required unless mode is `recent`. Optional `limit` (1-100, default 20), `team` (team slug filter), and `filters` for `tags` and `collections`. Read-only and idempotent.
 
 ### update
-Update an existing memory by `target_id` (mem-* short ID). Provide `changes` with at least one of: `content`, `headline`, `tags`, `metadata`. Tags are additive. Each update creates a new revision (full history preserved). The `rewrite` flag defaults to false — content is stored exactly as provided unless explicitly opted in.
+Update an existing memory by `target_id` (mem-* short ID or `team-slug:mem-xxxx`). Provide `changes` with at least one of: `content`, `headline`, `tags`, `metadata`, `collections` (personal), or `collection` (team collection move within the same team). Tags are additive. Each update creates a new revision (full history preserved). The `rewrite` flag defaults to false — content is stored exactly as provided unless explicitly opted in.
 
 ### forget
-Soft-delete a memory by `target_id` (mem-* short ID). Default behavior is a safe, reversible soft-delete. With `wipe_history: true`, permanently purges all revisions (IRREVERSIBLE) — requires `confirm_irreversible_wipe: true` or returns a confirmation prompt instead. Idempotent for soft-delete.
+Soft-delete a memory by `target_id` (mem-* short ID or `team-slug:mem-xxxx`). Default behavior is a safe, reversible soft-delete. With `wipe_history: true`, permanently purges all revisions (IRREVERSIBLE) — requires `confirm_irreversible_wipe: true` or returns a confirmation prompt instead. Idempotent for soft-delete.
